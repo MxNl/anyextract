@@ -6,6 +6,7 @@ tar_option_set(
     "dplyr",
     "readr",
     "janitor",
+    "terra",
     "stars",
     "sf"
     ),
