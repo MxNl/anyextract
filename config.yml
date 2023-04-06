@@ -1,0 +1,13 @@
+# run mode (test, live)
+run_mode: live
+parallel: FALSE
+import_list_location: data_proj/import_list.csv
+well_meta_location: data_proj/well_meta.csv
+# test
+test:
+  n_sites: 100
+  n_datasets: 3
+
+live:
+  n_sites: Inf
+  n_datasets: Inf

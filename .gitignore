@@ -1,5 +1,12 @@
+library/
+local/
+cellar/
+lock/
+python/
+staging/
 .Rproj.user
 .Rhistory
 .Rdata
 .httr-oauth
 .DS_Store
+data_proj

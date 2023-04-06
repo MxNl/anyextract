@@ -1,2 +1,6 @@
+^renv$
+^renv\.lock$
 ^anyextract\.Rproj$
 ^\.Rproj\.user$
+^targets$
+^data_proj$
