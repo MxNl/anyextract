@@ -18,7 +18,8 @@ Suggests:
     usethis,
     yaml,
     gsheet,
-    janitor
+    janitor,
+    rmarkdown
 Imports: 
     exactextractr,
     terra,

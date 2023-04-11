@@ -1,8 +1,10 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
+.Random.seed|object|dc4584b35f1849d9|||||||||||||||
 any_extract|function|9b5d63ed846421cf|||||||||||||||
 bind_cols_single_idcol|function|7ff5307e060abc4e|||||||||||||||
 CRS_WELL_META|object|20d480e9408f690b|||||||||||||||
-export_well_extracted|stem|302d62d18f5e1f5c|418dfec4b4dd89d1|9c6200699fcaff39|902918378||t19453.4800512026s|254ce6af65daf45e|1002961|rds|local|vector|||2.22||
+eda_static_features|stem|d7a2c59f0a42316b|f214f09956e09078|3d15f9139820c4a3|887578295|eda_static_features.html*eda_static_features_files*eda_static_features.qmd|t19458.5145729117s|e833dca7fe80db5e|8656314|file|local|vector|||35.24||
+export_well_extracted|stem|73fac06683e3fa6f|2f05b3022ee27212|8bc095590ffe4828|902918378||t19458.4348106008s|c25cce569957598a|1026626|rds|local|vector|||1.93||
 import_list|stem|e5f03599d75ac757|46bd5ba9ef9db8e6|c8cf6ef03c4da9af|267603865||t19453.4130417947s|b7a7039e1bb97ed3|2367|rds|local|list||import_list_ad7952bb*import_list_b0624057*import_list_4b8acae4*import_list_f39070a0*import_list_5ca294af*import_list_6259c55e*import_list_adcbcee6*import_list_56fc34d6*import_list_4e07c98c*import_list_593e711e*import_list_4ea58c0d*import_list_6fe62624*import_list_ba29a389*import_list_97b6e728*import_list_df8e49fd*import_list_1ee208af*import_list_db70a9f1*import_list_d839972f*import_list_2d101f16*import_list_4428f8d4*import_list_2389e37c*import_list_b528ecce*import_list_ed70a3ee*import_list_8e9c3632*import_list_56a5a060*import_list_1a0d3c6a*import_list_980c7792*import_list_c411ec87*import_list_435c2794*import_list_6ef01d13*import_list_d27dafdc*import_list_2c2b10fe*import_list_5da4efaa*import_list_6764583f*import_list_9f205941*import_list_c27fdb7e*import_list_48bef91b*import_list_977f6568|0.75||
 import_list_location|stem|25e88d793a55aabe|627dfc406a753e0c|616e242b98babc54|-1713974632|data_proj/import_list.csv|t19453.3539088285s|280d6ee241dcd474|12367|file|local|vector|||0.02||
 IMPORT_LIST_LOCATION|object|c0fbbca7a71b7bfe|||||||||||||||
@@ -10,11 +12,13 @@ N_DATASETS|object|534bb5d0bc2a1d1a|||||||||||||||
 N_SITES|object|534bb5d0bc2a1d1a|||||||||||||||
 path_functions|object|59af2dd4153e940d|||||||||||||||
 path_targets|object|25dd98ece6e7ce64|||||||||||||||
+postprocess_extracted_values|function|96904825d9bd55f6|||||||||||||||
 read_import_list|function|9966c78e991d0726|||||||||||||||
 read_well_meta|function|2cec817a62509b8d|||||||||||||||
 RUN_MODE|object|c0a1f3272ad27deb|||||||||||||||
 setup_targets_for|function|01acb4ee39d950af|||||||||||||||
-targets_import|object|16a8940747ed61f5|||||||||||||||
+targets_all|object|7e36f2b606446e70|||||||||||||||
+targets_import|object|0d57485884f291a7|||||||||||||||
 well_extracted|stem|302d62d18f5e1f5c|3bd3a9ad06f92e01|19e4e29bfa747fc4|575320979||t19453.4800170359s|254ce6af65daf45e|1002961|rds|local|vector|||0.15||
 well_extracted_list|pattern|5f24d274f5b120a8|6f508a66b6f426bf||252863878||||2500762|fst_tbl|local|list||well_extracted_list_80e9b9ce*well_extracted_list_a7b8e9db*well_extracted_list_7c6f1f87*well_extracted_list_87c6b47f*well_extracted_list_18ce9d76*well_extracted_list_5084d2fe*well_extracted_list_77bfe605*well_extracted_list_3bdd0387*well_extracted_list_e807b394*well_extracted_list_0013542d*well_extracted_list_288ce3f0*well_extracted_list_21fa0497*well_extracted_list_99cfd211*well_extracted_list_ad249f8d*well_extracted_list_8e33ccc7*well_extracted_list_410679fe*well_extracted_list_f02b9ae1*well_extracted_list_3b7909df*well_extracted_list_775fb9d9*well_extracted_list_c76d1c2a*well_extracted_list_2b60498a*well_extracted_list_77897f4a*well_extracted_list_58c7fed8*well_extracted_list_c2c71899*well_extracted_list_abeb5ab4*well_extracted_list_ef18e27e*well_extracted_list_1590c387*well_extracted_list_235c2a0d*well_extracted_list_2795e9e4*well_extracted_list_b43788f4*well_extracted_list_1fc4a0c0*well_extracted_list_e05cdb72*well_extracted_list_af07bf44*well_extracted_list_01417297*well_extracted_list_3bbd2fb1*well_extracted_list_79cfee6f*well_extracted_list_a3975e0b*well_extracted_list_87856cd5|573.64||
 well_extracted_list_0013542d|branch|151861440dabf7f2|6f508a66b6f426bf|be6b13ae58ee1f4e|-1090880168||t19453.4374013164s|fa76c6cf103809d6|65951|fst_tbl|local|list|well_extracted_list||3.53||
@@ -55,6 +59,7 @@ well_extracted_list_e05cdb72|branch|3d2058f83908cf52|6f508a66b6f426bf|515e1c93d5
 well_extracted_list_e807b394|branch|13996d77abf4a149|6f508a66b6f426bf|7e31f6f3db9c3102|1701417346||t19453.4373564603s|c3ee17d369eca402|68093|fst_tbl|local|list|well_extracted_list||3.8||
 well_extracted_list_ef18e27e|branch|d1b54e586fb378ef|6f508a66b6f426bf|a9c5965f28b67ec8|855140368||t19453.4432197477s|b4eeb1350ec5ab56|70429|fst_tbl|local|list|well_extracted_list||3.45||
 well_extracted_list_f02b9ae1|branch|fd75758c61153e45|6f508a66b6f426bf|fd997f8b4cfc53cd|502899970||t19453.4427985362s|27a4ea57801af2a3|64311|fst_tbl|local|list|well_extracted_list||3.47||
+well_extracted_postprocessed|stem|73fac06683e3fa6f|303d8cfdb808a465|925f0e613a94cbd4|679245107||t19458.5050274022s|c25cce569957598a|1026626|rds|local|vector|||0.05||
 well_meta|stem|a4387880147eaa66|afd7835df898569d|ed85b6fc2e0953e6|-1643337170||t19453.4130500817s|56af0b9187b4ee2f|124629|rds|local|vector|||0.47||
 well_meta_location|stem|5b15a2f264c3054d|67720fbb910b3d37|370a11d187ce3f12|264773954|data_proj/well_meta.csv|t19451.612855692s|3d761aca81f6b2f5|545757|file|local|vector|||0.89|Paket dplyr wurde unter R Version 4.1.3 erstellt. Paket readr wurde unter R Version 4.1.3 erstellt. Paket janitor wurde unter R Version 4.1.3 erstellt. Paket stars wurde unter R Version 4.1.3 erstellt. Paket sf wurde unter R Version 4.1.3 erstellt|
 WELL_META_LOCATION|object|dd3a688091f6b458|||||||||||||||

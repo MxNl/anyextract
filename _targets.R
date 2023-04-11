@@ -36,6 +36,6 @@ if(yaml::read_yaml(file = "config.yml")$parallel) future::plan(future::multicore
 
 # Define targets
 c(
-  targets_import
+  targets_all
 )
 

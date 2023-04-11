@@ -1,0 +1,304 @@
+---
+title: "Static geospatial features"
+subtitle: "EDA as quality check of extracted values"
+format: 
+  html:
+    toc: true
+    code-fold: show
+    out-width: 100%
+editor: visual
+filters:
+   - lightbox
+lightbox: auto
+---
+
+```{r, echo=FALSE, include=FALSE}
+library(targets)
+library(dplyr)
+library(reactable)
+library(skimr)
+library(naniar)
+library(ggplot2)
+library(readr)
+library(tidyr)
+```
+
+# Import
+
+CSV with extracted values
+```{r}
+data_extracted <- tar_read(well_extracted_postprocessed)
+```
+
+CSV with list of reference wells
+
+```{r}
+#| messages: FALSE
+reference_wells <- read_csv("data_proj/reference_wells_ids.csv", show_col_types = FALSE)
+```
+
+::: callout-warning
+```{r}
+#| echo: FALSE
+non_matching_wells <- reference_wells |> 
+  left_join(data_extracted, by = "well_id") |> 
+  filter(if_all(-well_id, is.na)) |> 
+  pull(well_id)
+```
+
+There are `r length(non_matching_wells)` wells with ids that don't match between `reference_wells` and `data_extracted`: <br>`r non_matching_wells %>% paste(" -   ", .) |> paste(collapse = "<br>")`<br> This could/should be checked again!
+:::
+
+# Overview
+
+## Raw data
+
+::: panel-tabset
+### All wells
+
+```{r}
+data_extracted |> 
+  reactable(
+    searchable = TRUE,
+    filterable = TRUE,
+    defaultColDef = colDef(minWidth = 200)
+  )
+```
+
+### Reference wells
+
+```{r}
+data_extracted |> 
+  inner_join(reference_wells, by = "well_id") |> 
+  reactable(
+    searchable = TRUE,
+    filterable = TRUE,
+    defaultColDef = colDef(minWidth = 200)
+  )
+```
+:::
+
+## Summary statistics
+
+::: panel-tabset
+### All wells
+
+```{r}
+summary_table <- data_extracted |> 
+  skim()
+
+summary_table
+```
+
+### Reference wells
+
+```{r}
+summary_table <- data_extracted |> 
+  inner_join(reference_wells, by = "well_id") |> 
+  skim()
+
+summary_table
+```
+:::
+
+# Missing Values
+
+## Overview
+
+Missing values per column
+
+::: panel-tabset
+### All wells
+
+```{r}
+#| out-width: 100%
+data_extracted |> 
+  vis_miss()
+```
+
+### Reference wells
+
+```{r}
+#| out-width: 100%
+data_extracted |> 
+  inner_join(reference_wells, by = "well_id") |> 
+  vis_miss()
+```
+:::
+
+## Spatial distribution
+
+Join data with coordinates
+
+```{r}
+data_extracted_sf <- data_extracted |> 
+  left_join(tar_read(well_meta), by = "well_id") |> 
+  sf::st_as_sf()
+```
+
+Select columns with less than 99% complete rate
+
+```{r}
+variables_with_missing <- summary_table |> 
+  filter(complete_rate <= 0.99) |> 
+  pull(skim_variable)
+```
+
+Plot spatial distribution of missing values 
+
+::: {.panel-tabset}
+
+### All wells
+
+```{r}
+#| out-width: 100%
+  
+data_extracted_sf |> 
+  select(well_id, all_of(variables_with_missing), eumohp_dsd1) |> 
+  tidyr::pivot_longer(cols = -all_of(c("well_id", "geometry"))) |> 
+  mutate(is_na = is.na(value)) |> 
+  ggplot() +
+  geom_sf(aes(colour = is_na), size = 0.5) +
+  labs(colour = "Is NA?") +
+  guides(colour = guide_legend(
+    orientation = "horizontal"
+  )) +
+  facet_wrap(~ name, ncol = 2) +
+  theme_minimal() +
+  theme(
+    legend.position = "top"
+  )
+```
+
+### Reference wells
+
+```{r}
+#| out-width: 100%
+  
+data_extracted_sf |> 
+  inner_join(reference_wells, by = "well_id") |> 
+  select(well_id, all_of(variables_with_missing), eumohp_dsd1) |> 
+  pivot_longer(cols = -all_of(c("well_id", "geometry"))) |> 
+  mutate(is_na = is.na(value)) |> 
+  ggplot() +
+  geom_sf(aes(colour = is_na), size = 0.5) +
+  labs(colour = "Is NA?") +
+  guides(colour = guide_legend(
+    orientation = "horizontal"
+  )) +
+  facet_wrap(~ name, ncol = 2) +
+  theme_minimal() +
+  theme(
+    legend.position = "top"
+  )
+```
+
+:::
+
+# Distributions
+
+
+::: callout-warning
+Variable types (categorical/numerical) not yet specified correctly!
+:::
+
+## Numerical Variables
+
+::: {.panel-tabset}
+
+### All wells
+```{r}
+#| fig-height: 12
+#| message: false
+#| warning: false
+data_extracted |> 
+  select(where(is.numeric)) |> 
+  pivot_longer(cols = everything()) |> 
+  ggplot(aes(value)) +
+  geom_histogram(fill = "steelblue") +
+  scale_fill_viridis_c() +
+  facet_wrap(~name, scales = "free", ncol = 4) +
+  theme_minimal()
+```
+
+### Reference wells
+```{r}
+#| fig-height: 12
+#| message: false
+#| warning: false
+data_extracted |> 
+  inner_join(reference_wells, by = "well_id") |> 
+  select(where(is.numeric)) |> 
+  pivot_longer(cols = everything()) |> 
+  ggplot(aes(value)) +
+  geom_histogram(fill = "steelblue") +
+  scale_fill_viridis_c() +
+  facet_wrap(~name, scales = "free", ncol = 4) +
+  theme_minimal()
+```
+
+:::
+
+
+## Categorical variables
+
+::: {.panel-tabset}
+
+### All wells
+```{r}
+#| message: false
+#| warning: false
+data_extracted |> 
+  select(!where(is.numeric), -well_id) |> 
+  pivot_longer(cols = everything()) |> 
+  ggplot(aes(forcats::fct_rev(forcats::fct_infreq(value)))) +
+  geom_histogram(stat = "count", fill = "steelblue") +
+  coord_flip() +
+  scale_fill_viridis_c() +
+  facet_wrap(~name, scales = "free", ncol = 3) +
+  theme_minimal()
+```
+
+### Reference wells
+```{r}
+#| message: false
+#| warning: false
+data_extracted |> 
+  inner_join(reference_wells, by = "well_id") |> 
+  select(!where(is.numeric), -well_id) |> 
+  pivot_longer(cols = everything()) |> 
+  ggplot(aes(forcats::fct_rev(forcats::fct_infreq(value)))) +
+  geom_histogram(stat = "count", fill = "steelblue") +
+  coord_flip() +
+  scale_fill_viridis_c() +
+  facet_wrap(~name, scales = "free", ncol = 3) +
+  theme_minimal()
+```
+
+:::
+
+# Correlations
+
+::: {.panel-tabset}
+
+### All wells
+```{r}
+#| message: false
+#| warning: false
+data_extracted |> 
+  select(-well_id, where(is.numeric)) |> 
+  select(where(is.numeric)) |> 
+  GGally::ggcorr(hjust = 1, color = "grey") 
+```
+### Reference wells
+```{r}
+#| message: false
+#| warning: false
+data_extracted |> 
+  inner_join(reference_wells, by = "well_id") |> 
+  select(-well_id, where(is.numeric)) |> 
+  select(where(is.numeric)) |> 
+  GGally::ggcorr(hjust = 1, color = "grey") 
+```
+
+:::

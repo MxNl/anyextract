@@ -1,4 +1,4 @@
-targets_import <- list(
+targets_all <- list(
   tar_file(
     import_list_location,
     IMPORT_LIST_LOCATION
@@ -7,7 +7,6 @@ targets_import <- list(
     import_list,
     read_import_list(IMPORT_LIST_LOCATION),
     iteration = "list"
-    # cue = tar_cue("always")
   ),
   tar_file(
     well_meta_location,
@@ -17,12 +16,6 @@ targets_import <- list(
     well_meta,
     read_well_meta(well_meta_location, n_max = N_SITES)
   ),
-  # tar_target(
-  #   well_extracted_list,
-  #   import_list |>
-  #     purrr::map(any_extract, well_meta),
-  #   iteration = "list"
-  # ),
   tar_target(
     well_extracted_list,
     any_extract(import_list, well_meta),
@@ -39,10 +32,19 @@ targets_import <- list(
       bind_cols_single_idcol()
   ),
   tar_target(
+    well_extracted_postprocessed,
+    well_extracted |>
+      postprocess_extracted_values()
+  ),
+  tar_target(
     export_well_extracted,
-    readr::write_csv2(
-      well_extracted,
-      "data_proj/well_extracted.csv"
+    readr::write_csv(
+      well_extracted_postprocessed,
+      "data_proj/well_extracted_commasep.csv"
       )
+  ),
+  tar_quarto(
+    eda_static_features,
+    "eda_static_features.qmd"
   )
 )
