@@ -14,7 +14,9 @@ targets_all <- list(
   ),
   tar_target(
     well_meta,
-    read_well_meta(well_meta_location, n_max = N_SITES)
+    "data_proj/gwlstations.shp" |>
+      sf::st_read() |>
+      rename(well_id = MEST_ID)
   ),
   tar_target(
     well_extracted_list,
@@ -40,11 +42,11 @@ targets_all <- list(
     export_well_extracted,
     readr::write_csv(
       well_extracted_postprocessed,
-      "data_proj/well_extracted_commasep.csv"
+      "data_proj/well_extracted_mariana_commasep.csv"
       )
-  ),
-  tar_quarto(
-    eda_static_features,
-    "eda_static_features.qmd"
   )
+  # tar_quarto(
+  #   eda_static_features,
+  #   "eda_static_features.qmd"
+  # )
 )
