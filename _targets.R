@@ -1,5 +1,7 @@
 library(targets)
 library(tarchetypes)
+library(future)
+library(future.callr)
 
 tar_option_set(
   packages = c(
@@ -31,8 +33,8 @@ here::here(path_functions) |>
   purrr::map(source)
 
 # switch between parallel and sequential execution
-if(yaml::read_yaml(file = "config.yml")$parallel) future::plan(future::multicore)
-# RUN_MODE <- yaml::read_yaml(file = "config.yml")$run_mode
+if(yaml::read_yaml(file = "config.yml")$parallel) future::plan(future::multicore, workers = 10)
+RUN_MODE <- yaml::read_yaml(file = "config.yml")$run_mode
 
 # Define targets
 c(

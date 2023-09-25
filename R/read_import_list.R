@@ -1,8 +1,22 @@
+#' read_import_list
+#'
+#' @param filepath
+#'
+#' @return
+#' @export
+#'
+#' @examples
 read_import_list <- function(filepath) {
-  filepath |>
-    readr::read_csv2() |>
+  import_list <- filepath |>
+    readr::read_csv2(show_col_types = FALSE) |>
     tidyr::drop_na(data_source_location, variable_name_new, variable_name_origin) |>
-    dplyr::group_by(data_source_location) |>
-    dplyr::group_split() %>%
-    magrittr::extract(1:ifelse(RUN_MODE == "live", length(.), N_DATASETS))
+    dplyr::group_by(data_source_location, extraction_shape, extraction_summary_function) |>
+    dplyr::group_split()
+
+  if (RUN_MODE == "live") {
+    import_list
+  } else if (RUN_MODE == "test") {
+    import_list |>
+      magrittr::extract(1:ifelse(N_DATASETS == Inf, length(import_list), N_DATASETS))
+  }
 }

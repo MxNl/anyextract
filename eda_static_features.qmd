@@ -12,7 +12,9 @@ filters:
 lightbox: auto
 ---
 
-```{r, echo=FALSE, include=FALSE}
+```{r}
+#| echo: false
+#| include: false
 library(targets)
 library(dplyr)
 library(reactable)
@@ -26,6 +28,7 @@ library(tidyr)
 # Import
 
 CSV with extracted values
+
 ```{r}
 data_extracted <- tar_read(well_extracted_postprocessed)
 ```
@@ -84,6 +87,7 @@ data_extracted |>
 ### All wells
 
 ```{r}
+#| out-width: 60%
 summary_table <- data_extracted |> 
   skim()
 
@@ -113,16 +117,16 @@ Missing values per column
 ```{r}
 #| out-width: 100%
 data_extracted |> 
-  vis_miss()
+  vis_miss(warn_large_data = FALSE)
 ```
 
 ### Reference wells
 
 ```{r}
 #| out-width: 100%
-data_extracted |> 
-  inner_join(reference_wells, by = "well_id") |> 
-  vis_miss()
+# data_extracted |> 
+#   inner_join(reference_wells, by = "well_id") |> 
+#   vis_miss()
 ```
 :::
 
@@ -144,10 +148,9 @@ variables_with_missing <- summary_table |>
   pull(skim_variable)
 ```
 
-Plot spatial distribution of missing values 
+Plot spatial distribution of missing values
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ### All wells
 
 ```{r}
@@ -175,28 +178,26 @@ data_extracted_sf |>
 ```{r}
 #| out-width: 100%
   
-data_extracted_sf |> 
-  inner_join(reference_wells, by = "well_id") |> 
-  select(well_id, all_of(variables_with_missing), eumohp_dsd1) |> 
-  pivot_longer(cols = -all_of(c("well_id", "geometry"))) |> 
-  mutate(is_na = is.na(value)) |> 
-  ggplot() +
-  geom_sf(aes(colour = is_na), size = 0.5) +
-  labs(colour = "Is NA?") +
-  guides(colour = guide_legend(
-    orientation = "horizontal"
-  )) +
-  facet_wrap(~ name, ncol = 2) +
-  theme_minimal() +
-  theme(
-    legend.position = "top"
-  )
+# data_extracted_sf |> 
+#   inner_join(reference_wells, by = "well_id") |> 
+#   select(well_id, all_of(variables_with_missing), eumohp_dsd1) |> 
+#   pivot_longer(cols = -all_of(c("well_id", "geometry"))) |> 
+#   mutate(is_na = is.na(value)) |> 
+#   ggplot() +
+#   geom_sf(aes(colour = is_na), size = 0.5) +
+#   labs(colour = "Is NA?") +
+#   guides(colour = guide_legend(
+#     orientation = "horizontal"
+#   )) +
+#   facet_wrap(~ name, ncol = 2) +
+#   theme_minimal() +
+#   theme(
+#     legend.position = "top"
+#   )
 ```
-
 :::
 
 # Distributions
-
 
 ::: callout-warning
 Variable types (categorical/numerical) not yet specified correctly!
@@ -204,11 +205,11 @@ Variable types (categorical/numerical) not yet specified correctly!
 
 ## Numerical Variables
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ### All wells
+
 ```{r}
-#| fig-height: 12
+#| fig-height: 30
 #| message: false
 #| warning: false
 data_extracted |> 
@@ -222,29 +223,28 @@ data_extracted |>
 ```
 
 ### Reference wells
+
 ```{r}
-#| fig-height: 12
+#| fig-height: 30
 #| message: false
 #| warning: false
-data_extracted |> 
-  inner_join(reference_wells, by = "well_id") |> 
-  select(where(is.numeric)) |> 
-  pivot_longer(cols = everything()) |> 
-  ggplot(aes(value)) +
-  geom_histogram(fill = "steelblue") +
-  scale_fill_viridis_c() +
-  facet_wrap(~name, scales = "free", ncol = 4) +
-  theme_minimal()
+# data_extracted |> 
+#   inner_join(reference_wells, by = "well_id") |> 
+#   select(where(is.numeric)) |> 
+#   pivot_longer(cols = everything()) |> 
+#   ggplot(aes(value)) +
+#   geom_histogram(fill = "steelblue") +
+#   scale_fill_viridis_c() +
+#   facet_wrap(~name, scales = "free", ncol = 4) +
+#   theme_minimal()
 ```
-
 :::
-
 
 ## Categorical variables
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ### All wells
+
 ```{r}
 #| message: false
 #| warning: false
@@ -260,45 +260,46 @@ data_extracted |>
 ```
 
 ### Reference wells
+
 ```{r}
 #| message: false
 #| warning: false
-data_extracted |> 
-  inner_join(reference_wells, by = "well_id") |> 
-  select(!where(is.numeric), -well_id) |> 
-  pivot_longer(cols = everything()) |> 
-  ggplot(aes(forcats::fct_rev(forcats::fct_infreq(value)))) +
-  geom_histogram(stat = "count", fill = "steelblue") +
-  coord_flip() +
-  scale_fill_viridis_c() +
-  facet_wrap(~name, scales = "free", ncol = 3) +
-  theme_minimal()
+# data_extracted |> 
+#   inner_join(reference_wells, by = "well_id") |> 
+#   select(!where(is.numeric), -well_id) |> 
+#   pivot_longer(cols = everything()) |> 
+#   ggplot(aes(forcats::fct_rev(forcats::fct_infreq(value)))) +
+#   geom_histogram(stat = "count", fill = "steelblue") +
+#   coord_flip() +
+#   scale_fill_viridis_c() +
+#   facet_wrap(~name, scales = "free", ncol = 3) +
+#   theme_minimal()
 ```
-
 :::
 
 # Correlations
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ### All wells
+
 ```{r}
 #| message: false
 #| warning: false
-data_extracted |> 
-  select(-well_id, where(is.numeric)) |> 
-  select(where(is.numeric)) |> 
-  GGally::ggcorr(hjust = 1, color = "grey") 
-```
-### Reference wells
-```{r}
-#| message: false
-#| warning: false
-data_extracted |> 
-  inner_join(reference_wells, by = "well_id") |> 
-  select(-well_id, where(is.numeric)) |> 
-  select(where(is.numeric)) |> 
-  GGally::ggcorr(hjust = 1, color = "grey") 
+# data_extracted |> 
+#   select(-well_id, where(is.numeric)) |> 
+#   select(where(is.numeric)) |> 
+#   GGally::ggcorr(hjust = 1, color = "grey") 
 ```
 
+### Reference wells
+
+```{r}
+#| message: false
+#| warning: false
+# data_extracted |> 
+#   inner_join(reference_wells, by = "well_id") |> 
+#   select(-well_id, where(is.numeric)) |> 
+#   select(where(is.numeric)) |> 
+#   GGally::ggcorr(hjust = 1, color = "grey") 
+```
 :::

@@ -3,7 +3,7 @@
 
 # targets::tar_make_future(workers = future::availableCores() - 1)
 if(yaml::read_yaml(file = "config.yml")$parallel) {
-  targets::tar_make_future(workers = ceiling(future::availableCores()*0.6))
+  targets::tar_make_future(workers = ceiling(future::availableCores()*0.3))
 } else {
   targets::tar_make()
 }

@@ -19,7 +19,8 @@ Suggests:
     yaml,
     gsheet,
     janitor,
-    rmarkdown
+    rmarkdown,
+    here
 Imports: 
     exactextractr,
     terra,

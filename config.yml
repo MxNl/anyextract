@@ -1,12 +1,12 @@
 # run mode (test, live)
 run_mode: live
 parallel: FALSE
-import_list_location: data_proj/import_list.csv
-well_meta_location: data_proj/well_meta.csv
+import_list_location: data_proj/import_list_hyras_t.csv
+well_meta_location: data_proj/well_meta_all.csv
 # test
 test:
-  n_sites: 100
-  n_datasets: 3
+  n_sites: 30
+  n_datasets: Inf
 
 live:
   n_sites: Inf
