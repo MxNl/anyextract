@@ -7,3 +7,4 @@ WELL_META_LOCATION <- purrr::chuck(YML_CONFIG, "well_meta_location")
 N_SITES <- purrr::chuck(YML_CONFIG, RUN_MODE, "n_sites") |> as.numeric()
 N_DATASETS <- purrr::chuck(YML_CONFIG, RUN_MODE, "n_datasets") |> as.numeric()
 CRS_WELL_META <- 25832
+
