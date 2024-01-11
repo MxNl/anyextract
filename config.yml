@@ -1,12 +1,12 @@
 # run mode (test, live)
 run_mode: live
 parallel: FALSE
-import_list_location: data_proj/import_list_hyras_t.csv
-well_meta_location: data_proj/well_meta_all.csv
+import_list_location: data_proj/groundwater-spatial-modeling-challenge/import_list_gw_spatial_modeling_challenge.csv
+well_meta_location: data_proj/groundwater-spatial-modeling-challenge/FROST_NO3_XY_data.csv
 # test
 test:
-  n_sites: 30
-  n_datasets: Inf
+  n_sites: Inf
+  n_datasets: 4
 
 live:
   n_sites: Inf
