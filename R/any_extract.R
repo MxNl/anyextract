@@ -1,13 +1,11 @@
 #' any_extract
 #'
-#' @param extract_from
-#' @param extract_at
+#' @param extract_from tibble containing information about file location from which data should be extracted
+#' @param extract_at sf object which is used to extract data at
 #' @param id_column Variable in `extract at` that contains an identifier. Default is `NULL`. If `NULL`, an identifier column will be guessed by searching for column names that contain "ID" or "id" and have as many unique values as the number of rows in `extract at`
 #'
 #' @return
 #' @export
-#'
-#' @examples
 any_extract <- function(extract_from, extract_at, id_column = NULL) {
   if(!is.null(id_column)) id_column <- enquo(id_column)
   test <- FALSE
