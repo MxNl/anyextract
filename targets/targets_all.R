@@ -55,9 +55,9 @@ targets_all <- list(
   ),
   tar_target(
     export_well_extracted,
-    arrow::write_parquet(
+    readr::write_csv2(
       well_extracted_postprocessed,
-      "data_proj/well_extracted_static_features_all.parquet"
+      "data_proj/gwsmc_extracted_features_all.csv"
       ),
     priority = 1
   )
