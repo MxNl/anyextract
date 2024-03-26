@@ -4,10 +4,14 @@
 \alias{any_extract}
 \title{any_extract}
 \usage{
-any_extract(extract_source, extract_locations)
+any_extract(extract_from, extract_at, id_column = NULL)
 }
 \arguments{
-\item{extract_locations}{}
+\item{extract_from}{tibble containing information about file location from which data should be extracted}
+
+\item{extract_at}{sf object which is used to extract data at}
+
+\item{id_column}{Variable in \verb{extract at} that contains an identifier. Default is \code{NULL}. If \code{NULL}, an identifier column will be guessed by searching for column names that contain "ID" or "id" and have as many unique values as the number of rows in \verb{extract at}}
 }
 \value{
 

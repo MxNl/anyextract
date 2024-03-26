@@ -13,14 +13,11 @@ RoxygenNote: 7.1.2
 URL: https://github.com/MxNl/anyextract
 BugReports: https://github.com/MxNl/anyextract/issues
 Suggests: 
-    tarchetypes,
-    targets,
     usethis,
-    yaml,
     gsheet,
     janitor,
-    rmarkdown,
-    here
+    here,
+    rmarkdown
 Imports: 
     exactextractr,
     terra,

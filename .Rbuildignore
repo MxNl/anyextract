@@ -4,4 +4,9 @@
 ^\.Rproj\.user$
 ^targets$
 ^data_proj$
-^/Data/github/anyextract/R/constants\.R$
+^eda_static_features\.qmd$
+^run_pipeline\.R$
+^config\.yml$
+^_targets\.R$
+^\.idea$
+^R\constants\.R$

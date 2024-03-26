@@ -1,29 +1,27 @@
 #' any_extract
 #'
-#' @param extract_from
-#' @param extract_at
+#' @param extract_from tibble containing information about file location from which data should be extracted
+#' @param extract_at sf object which is used to extract data at
 #' @param id_column Variable in `extract at` that contains an identifier. Default is `NULL`. If `NULL`, an identifier column will be guessed by searching for column names that contain "ID" or "id" and have as many unique values as the number of rows in `extract at`
 #'
 #' @return
 #' @export
 #'
-#' @examples
 any_extract <- function(extract_from, extract_at, id_column = NULL) {
   if(!is.null(id_column)) id_column <- enquo(id_column)
   test <- FALSE
   if(test) {
-    # id_column = NULL
-    # extract_from <- targets::tar_read(import_list) |> purrr::chuck(1)
-    # extract_from <- targets::tar_read(import_list) |> purrr::chuck(24)
-    # extract_from <- targets::tar_read(import_list) |> purrr::chuck(29)
-    # extract_from <- targets::tar_read(import_list) |> purrr::chuck(35)
-    # extract_from <- targets::tar_read(import_list) |> purrr::keep(.p = ~ nrow(.x) > 1) |> purrr::chuck(2)
-    # extract_at <- targets::tar_read(well_meta)
+    id_column = NULL
+    extract_from <- targets::tar_read(import_list) |> purrr::chuck(1)
+    extract_from <- targets::tar_read(import_list) |> purrr::chuck(24)
+    extract_from <- targets::tar_read(import_list) |> purrr::chuck(29)
+    extract_from <- targets::tar_read(import_list) |> purrr::chuck(35)
+    extract_from <- targets::tar_read(import_list) |> purrr::keep(.p = ~ nrow(.x) > 1) |> purrr::chuck(2)
+    extract_at <- targets::tar_read(well_meta)
   }
   if(is.null(id_column)) {
     id_column <- extract_at |>
       sf::st_drop_geometry() |>
-      # dplyr::mutate(class_id = sample(1:5, 10, replace = TRUE)) |>
       dplyr::select(dplyr::contains("id")) |>
       dplyr::summarise_all(~ unique(.x) |> length()) |>
       dplyr::select_if(.predicate = ~.x == nrow(extract_at)) |>
@@ -59,7 +57,7 @@ any_extract <- function(extract_from, extract_at, id_column = NULL) {
 
   tictoc::tic()
 ## TIFF + Point --------------------------------------------------------------------
-  if(file_format %in% c("tif", "adf") & extraction_shape == "point") {
+  if(file_format %in% c("tif", "adf", "img", "ovr") & extraction_shape == "point") {
 
     # Extract point from Raster data as GeoTIFF
     extract_from_data <- stars::read_stars(filepath, proxy = TRUE) |>
@@ -85,7 +83,7 @@ any_extract <- function(extract_from, extract_at, id_column = NULL) {
 ## TIFF + Circle --------------------------------------------------------------------
 ### TIFF + Circle + largest area class --------------------------------------------------------------------
   # Extract circle from Raster data as GeoTIFF
-  } else if (file_format %in% c("tif", "adf") & is.numeric(extraction_shape) & extraction_summary_function == "largest area class") {
+  } else if (file_format %in% c("tif", "adf", "img", "ovr") & is.numeric(extraction_shape) & extraction_summary_function == "largest area class") {
     extract_from_data <- stars::read_stars(filepath, proxy = TRUE) |>
       as("Raster")
     extract_from_data_crs <- sf::st_crs(extract_from_data)
@@ -115,7 +113,7 @@ any_extract <- function(extract_from, extract_at, id_column = NULL) {
 
 ### TIFF + Circle + area fractions all classes --------------------------------------------------------------------
   # Extract circle from Raster data as GeoTIFF
-  } else if (file_format %in% c("tif", "adf") & is.numeric(extraction_shape) & extraction_summary_function == "area fractions all classes") {
+  } else if (file_format %in% c("tif", "adf", "img", "ovr") & is.numeric(extraction_shape) & extraction_summary_function == "area fractions all classes") {
     extract_from_data <- stars::read_stars(filepath, proxy = TRUE) |>
       as("Raster")
     extract_from_data_crs <- sf::st_crs(extract_from_data)
@@ -154,7 +152,7 @@ any_extract <- function(extract_from, extract_at, id_column = NULL) {
 
 ### TIFF + Circle + any stat function --------------------------------------------------------------------
   # Extract circle from Raster data as GeoTIFF
-  } else if (file_format %in% c("tif", "adf") & is.numeric(extraction_shape)) {
+  } else if (file_format %in% c("tif", "adf", "img", "ovr") & is.numeric(extraction_shape)) {
     extract_from_data <- stars::read_stars(filepath, proxy = TRUE) |>
       as("Raster")
     extract_from_data_crs <- sf::st_crs(extract_from_data)
