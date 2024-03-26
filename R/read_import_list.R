@@ -4,6 +4,7 @@
 #'
 #' @return
 #' @export
+#'
 read_import_list <- function(filepath) {
   import_list <- filepath |>
     readr::read_csv2(show_col_types = FALSE) |>
