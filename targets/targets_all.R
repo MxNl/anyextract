@@ -9,7 +9,17 @@ targets_all <- list(
   ),
   tar_target(
     import_list,
-    read_import_list(IMPORT_LIST_LOCATION),
+    {
+      import_list <- read_import_list(IMPORT_LIST_LOCATION)
+
+    if (RUN_MODE == "live") {
+      import_list
+    } else if (RUN_MODE == "test") {
+      import_list |>
+        magrittr::extract(1:ifelse(N_DATASETS == Inf, length(import_list), N_DATASETS))
+    }
+      }
+    ,
     iteration = "list",
     cue = targets::tar_cue("always")
   ),

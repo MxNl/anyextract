@@ -1,6 +1,6 @@
 #' read_import_list
 #'
-#' @param filepath
+#' @param filepath filepath to the csv containing the dataset informations
 #'
 #' @return
 #' @export
@@ -27,10 +27,5 @@ read_import_list <- function(filepath) {
         )
     )
 
-  if (RUN_MODE == "live") {
-    import_list
-  } else if (RUN_MODE == "test") {
-    import_list |>
-      magrittr::extract(1:ifelse(N_DATASETS == Inf, length(import_list), N_DATASETS))
-  }
+  return(import_list)
 }

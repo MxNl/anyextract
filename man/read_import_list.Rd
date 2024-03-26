@@ -7,7 +7,7 @@
 read_import_list(filepath)
 }
 \arguments{
-\item{filepath}{}
+\item{filepath}{filepath to the csv containing the dataset informations}
 }
 \value{
 

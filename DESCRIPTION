@@ -5,21 +5,23 @@ Authors@R:
     person("Maximilian", "Nölscher", , "max-n@posteo.de", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
-License: `use()`, `use_gpl3_license()` or friends to pick a
-    license
+License: CC BY 4.0
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
 URL: https://github.com/MxNl/anyextract
 BugReports: https://github.com/MxNl/anyextract/issues
 Suggests: 
+    targets,
+    tarchetypes,
     usethis,
     gsheet,
     janitor,
-    here,
     rmarkdown
 Imports: 
     exactextractr,
+    here,
+    yaml,
     terra,
     purrr,
     readr,

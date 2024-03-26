@@ -1,4 +1,3 @@
-YML_PATH <- here::here("config.yml")
 YML_CONFIG <- yaml::read_yaml("config.yml")
 
 RUN_MODE <- purrr::chuck(YML_CONFIG, "run_mode")

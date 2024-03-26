@@ -9,4 +9,10 @@
 ^config\.yml$
 ^_targets\.R$
 ^\.idea$
-^R\constants\.R$
+^constants\.R$
+^targets/targets_all\.R$
+^_extensions$
+^R/bind_cols_single_idcol\.R$
+^R/read_well_meta\.R$
+^R/postprocess_extracted_values\.R$
+^LICENSE\.md$
