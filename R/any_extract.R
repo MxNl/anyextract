@@ -12,11 +12,7 @@ any_extract <- function(extract_from, extract_at, id_column = NULL) {
   test <- FALSE
   if(test) {
     id_column = NULL
-    extract_from <- targets::tar_read(import_list) |> purrr::chuck(1)
-    extract_from <- targets::tar_read(import_list) |> purrr::chuck(24)
-    extract_from <- targets::tar_read(import_list) |> purrr::chuck(29)
-    extract_from <- targets::tar_read(import_list) |> purrr::chuck(35)
-    extract_from <- targets::tar_read(import_list) |> purrr::keep(.p = ~ nrow(.x) > 1) |> purrr::chuck(2)
+    extract_from <- targets::tar_read(import_list) |> purrr::chuck(3)
     extract_at <- targets::tar_read(well_meta)
   }
   if(is.null(id_column)) {
@@ -177,7 +173,6 @@ any_extract <- function(extract_from, extract_at, id_column = NULL) {
     } else if (file_format == "nc" & extraction_shape == "point") {
       extract_from_data <- terra::rast(filepath, subds = variable_name_origin)
       extract_at <- extract_at |>
-        sf::st_buffer(dist = extraction_shape) |>
         sf::st_transform(sf::st_crs(extract_from_data))
       data_extracted <- terra::extract(extract_from_data, extract_at, ID = FALSE) |>
         dplyr::rename_with(~variable_name_new) |>

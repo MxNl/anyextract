@@ -4,6 +4,7 @@ cellar/
 lock/
 python/
 staging/
+_targets
 .Rproj.user
 .Rhistory
 .Rdata
