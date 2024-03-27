@@ -172,6 +172,20 @@ any_extract <- function(extract_from, extract_at, id_column = NULL) {
 
 
 
+### NetCDF + Point --------------------------------------------------------------------
+  # Extract point from raster data as NetCDF
+    } else if (file_format == "nc" & extraction_shape == "point") {
+      extract_from_data <- terra::rast(filepath, subds = variable_name_origin)
+      extract_at <- extract_at |>
+        sf::st_buffer(dist = extraction_shape) |>
+        sf::st_transform(sf::st_crs(extract_from_data))
+      data_extracted <- terra::extract(extract_from_data, extract_at, ID = FALSE) |>
+        dplyr::rename_with(~variable_name_new) |>
+        dplyr::bind_cols(dplyr::select(extract_at, !! id_column) |> sf::st_drop_geometry()) |>
+        dplyr::relocate(!! id_column) |>
+        dplyr::as_tibble()
+
+
 ### NetCDF + Circle + any stat function --------------------------------------------------------------------
   # Extract circle from Raster data as GeoTIFF
     } else if (file_format == "nc" & is.numeric(extraction_shape)) {
